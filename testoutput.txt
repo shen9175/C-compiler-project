@@ -1,0 +1,327 @@
+int main()
+{
+   printf("hello, world\n", "");
+}
+-------------------------------------
+	.section	.rodata
+.LC0:
+	.string "hello, world\n"
+.LC1:
+	.string ""
+	.text
+.globl main
+	.type	main@function
+main:
+.LFB0:
+	pushq	%rbp
+	movq	%rsp, %rbp
+	subq	$20, %rsp
+	movq	$.LC1, %rsi
+	movq	$.LC0, %rdi
+	movq	$0, %rax
+	call	printf
+	movq	%rax, -20(%rbp)
+	leave
+	ret
+.LFE0:
+=======================================
+int a=10;
+int main()
+{
+	printf("Hello, world\n");
+	printf("Test this shit! %d\n",a);
+	return 0;
+}
+---------------------------------------
+.globl _a
+	.data
+	.align 2
+_a:
+	.long	10
+	.cstring
+LC0:
+	.ascii "Hello, world\0"
+LC1:
+	.ascii "Test this shit!\0"
+	.text
+.globl _main
+_main:
+LFB2:
+	pushq	%rbp
+LCFI0:
+	movq	%rsp, %rbp
+LCFI1:
+	leaq	LC0(%rip), %rdi
+	call	_puts
+	leaq	LC1(%rip), %rdi
+	call	_puts
+	movl	$0, %eax
+	leave
+	ret
+LFE2:
+	.section __TEXT,__eh_frame,coalesced,no_toc+strip_static_syms+live_support
+EH_frame1:
+	.set L$set$0,LECIE1-LSCIE1
+	.long L$set$0
+LSCIE1:
+	.long	0x0
+	.byte	0x1
+	.ascii "zR\0"
+	.byte	0x1
+	.byte	0x78
+	.byte	0x10
+	.byte	0x1
+	.byte	0x10
+	.byte	0xc
+	.byte	0x7
+	.byte	0x8
+	.byte	0x90
+	.byte	0x1
+	.align 3
+LECIE1:
+.globl _main.eh
+_main.eh:
+LSFDE1:
+	.set L$set$1,LEFDE1-LASFDE1
+	.long L$set$1
+LASFDE1:
+	.long	LASFDE1-EH_frame1
+	.quad	LFB2-.
+	.set L$set$2,LFE2-LFB2
+	.quad L$set$2
+	.byte	0x0
+	.byte	0x4
+	.set L$set$3,LCFI0-LFB2
+	.long L$set$3
+	.byte	0xe
+	.byte	0x10
+	.byte	0x86
+	.byte	0x2
+	.byte	0x4
+	.set L$set$4,LCFI1-LCFI0
+	.long L$set$4
+	.byte	0xd
+	.byte	0x6
+	.align 3
+LEFDE1:
+	.subsections_via_symbols
+==============================================
+int main()
+{
+        int a[10];
+        int i;i=0;
+        while(i>=0){a[i]=i;i=i-1;}
+        return 0;
+}
+
+-------------------------------------
+
+a:
+
+i:
+
+	.section	.rodata
+	.text
+.globl main
+	.type	main, @function
+main:
+.LFB0:
+	pushq	%rbp
+	movq	%rsp, %rbp
+	subq	$60, %rsp
+	movq	$0, %rax
+	movq	%rax, -44(%rbp)
+.L1:
+	movq	-44(%rbp), %rax
+	cmpq	$0, %rax
+	jge	.L2
+	jmp	.L3
+.L2:
+	movq	-44(%rbp), %rax
+	imulq	$4, %rax
+	movq	%rax, -48(%rbp)
+	leaq	-40(%rbp), %rax
+	movq	%rax, -56(%rbp)
+	movq	-48(%rbp), %rax
+	addq	-56(%rbp), %rax
+	movq	%rax, -56(%rbp)
+	movq	-44(%rbp), %rax
+	movq	%rax, -56(%rbp)
+	movq	-44(%rbp), %rax
+	subq	$1, %rax
+	movq	%rax, -60(%rbp)
+	movq	-60(%rbp), %rax
+	movq	%rax, -44(%rbp)
+	jmp	.L1
+.L3:
+	movq	$0, %rax
+	leave
+	ret
+.LFE0:
+=====================================
+
+int main()
+{
+        int i,c;
+        printf("world %d\n", 5);
+        printf("world %s\n", "foo");
+        c=getchar();
+        printf("world %c\n", c);
+        return 0;
+}
+
+----------------------------------------
+
+c:
+
+i:
+
+	.section	.rodata
+.LC0:
+	.string "world %d\n"
+.LC1:
+	.string "world %s\n"
+.LC2:
+	.string "foo"
+.LC3:
+	.string "world %c\n"
+	.text
+.globl main
+	.type	main, @function
+main:
+.LFB0:
+	pushq	%rbp
+	movq	%rsp, %rbp
+	subq	$56, %rsp
+	movl	$5, %esi
+	movq	$.LC0, %rdi
+	movq	$0, %rax
+	call	printf
+	movq	%rax, -20(%rbp)
+	movq	$.LC2, %rsi
+	movq	$.LC1, %rdi
+	movq	$0, %rax
+	call	printf
+	movq	%rax, -40(%rbp)
+	movq	$0, %rax
+	call	getchar
+	movq	%rax, -44(%rbp)
+	movq	-44(%rbp), %rax
+	movq	%rax, -8(%rbp)
+	movl	-8(%rbp), %esi
+	movq	$.LC3, %rdi
+	movq	$0, %rax
+	call	printf
+	movq	%rax, -56(%rbp)
+	movq	$0, %rax
+	leave
+	ret
+.LFE0:
+==================================
+int fib(int i);
+int readline(char a[]);
+int atoi(char a[]);
+int main() {
+   char s[64];
+   int i;
+   while (readline(s)!=0 && s[0]!='\004') {
+      i = atoi(s);
+      if (i <= 0) break;
+      printf("%d\n", fib(i));
+      }
+}
+------------------------------------
+	.cstring
+LC0:
+	.ascii "%d\12\0"
+	.text
+.globl _main
+_main:
+LFB2:
+	pushq	%rbp
+LCFI0:
+	movq	%rsp, %rbp
+LCFI1:
+	subq	$96, %rsp
+LCFI2:
+	movq	___stack_chk_guard@GOTPCREL(%rip), %rax
+	movq	(%rax), %rdx
+	movq	%rdx, -8(%rbp)
+	xorl	%edx, %edx
+	jmp	L2
+L3:
+	leaq	-80(%rbp), %rdi
+	call	_atoi
+	movl	%eax, -84(%rbp)
+	cmpl	$0, -84(%rbp)
+	jle	L9
+	movl	-84(%rbp), %edi
+	call	_fib
+	movl	%eax, %esi
+	leaq	LC0(%rip), %rdi
+	movl	$0, %eax
+	call	_printf
+L2:
+	leaq	-80(%rbp), %rdi
+	call	_readline
+	testl	%eax, %eax
+	je	L9
+	movzbl	-80(%rbp), %eax
+	cmpb	$4, %al
+	jne	L3
+L9:
+	movq	___stack_chk_guard@GOTPCREL(%rip), %rdx
+	movq	-8(%rbp), %rcx
+	xorq	(%rdx), %rcx
+	je	L8
+	call	___stack_chk_fail
+L8:
+	leave
+	ret
+LFE2:
+	.section __TEXT,__eh_frame,coalesced,no_toc+strip_static_syms+live_support
+EH_frame1:
+	.set L$set$0,LECIE1-LSCIE1
+	.long L$set$0
+LSCIE1:
+	.long	0x0
+	.byte	0x1
+	.ascii "zR\0"
+	.byte	0x1
+	.byte	0x78
+	.byte	0x10
+	.byte	0x1
+	.byte	0x10
+	.byte	0xc
+	.byte	0x7
+	.byte	0x8
+	.byte	0x90
+	.byte	0x1
+	.align 3
+LECIE1:
+.globl _main.eh
+_main.eh:
+LSFDE1:
+	.set L$set$1,LEFDE1-LASFDE1
+	.long L$set$1
+LASFDE1:
+	.long	LASFDE1-EH_frame1
+	.quad	LFB2-.
+	.set L$set$2,LFE2-LFB2
+	.quad L$set$2
+	.byte	0x0
+	.byte	0x4
+	.set L$set$3,LCFI0-LFB2
+	.long L$set$3
+	.byte	0xe
+	.byte	0x10
+	.byte	0x86
+	.byte	0x2
+	.byte	0x4
+	.set L$set$4,LCFI1-LCFI0
+	.long L$set$4
+	.byte	0xd
+	.byte	0x6
+	.align 3
+LEFDE1:
+	.subsections_via_symbols
