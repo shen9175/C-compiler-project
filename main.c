@@ -77,20 +77,23 @@ int main(int argc, char *argv[])
 					}
 				finalcode(yytreeroot);
 				fclose(yyout);
+				/* the following code is use gcc to compile the self-compiler generated assembly to binary
+				you can disable it if you just want to see the assembly
 				char bf[100];
-				if(havec==1)
+				if(havec==1)//not specify the output name
 					{
 					sprintf(bf,"gcc -c %s",output);
 					system(bf);
 					//execlp("","gcc","-c",output,NULL);
 					}
-				else	{
+				else	{//specify the output file
 					char* execu=strdup(output);
 					execu[strlen(execu)-2]='\0';
 					sprintf(bf,"gcc -o %s %s",execu,output);
 					system(bf);
 					//execlp("","gcc",output,NULL);
 					}
+					*/
 				}
 			}
 		deletetree(yytreeroot);
